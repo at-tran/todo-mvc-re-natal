@@ -8,28 +8,37 @@
 
 (def app-registry (.-AppRegistry ReactNative))
 (def text (r/adapt-react-class (.-Text ReactNative)))
+(def text-input (r/adapt-react-class (.-TextInput ReactNative)))
 (def view (r/adapt-react-class (.-View ReactNative)))
+(def scroll-view (r/adapt-react-class (.-ScrollView ReactNative)))
 (def image (r/adapt-react-class (.-Image ReactNative)))
 (def touchable-highlight (r/adapt-react-class (.-TouchableHighlight ReactNative)))
 
 (def logo-img (js/require "./images/cljs.png"))
 
 (defn alert [title]
-      (.alert (.-Alert ReactNative) title))
+  (.alert (.-Alert ReactNative) title))
 
 (defn app-root []
-  (let [greeting (subscribe [:get-todos])]
+  (let [todos (subscribe [:get-todos])]
     (fn []
-      [view {:style {:flex-direction "column" :margin 40 :align-items "center"}}
-       [text {:style {:font-size 30 :font-weight "100" :margin-bottom 20 :text-align "center"}
+      [scroll-view {:style                   {:flex-direction "column" :margin 40 :flex 1}
+                    :content-container-style {:align-items "center"}}
+       [text {:style      {:font-size     50
+                           :font-weight   "100"
+                           :margin-bottom 20
+                           :text-align    "center"
+                           :color         "pink"}
               :selectable true}
-        (str @greeting)]
-       [image {:source logo-img
-               :style  {:width 80 :height 80 :margin-bottom 30}}]
-       [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
-                             :on-press #(alert "HELLO!")}
-        [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "press me"]]])))
-
+        "todos"]
+       [view {:style {:flex 1 :align-self "stretch"}}
+        (map (fn [todo]
+               [text {:style {:height 58}
+                      :key   (random-uuid)}
+                (:desc todo)])
+             @todos)]
+       [text-input {:style             {:height 58 :align-self "stretch"}
+                    :on-submit-editing #(dispatch [:add-todo (.. % -nativeEvent -text)])}]])))
 (defn init []
-      (dispatch-sync [:initialize-db])
-      (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))
+  (dispatch-sync [:initialize-db])
+  (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))

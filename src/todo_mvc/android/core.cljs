@@ -23,9 +23,9 @@
 
 (defn app-root []
   [view {:style {:flex 1}}
-   [scroll-view {:style                          {:margin 40 :flex 1}
-                 :content-container-style        {:align-items "center"}
-                 :showsHorizontalScrollIndicator false}
+   [scroll-view {:style                        {:margin 40 :flex 1}
+                 :content-container-style      {:align-items "center"}
+                 :showsVerticalScrollIndicator false}
     [text {:style {:font-size     50
                    :font-weight   "100"
                    :margin-bottom 20

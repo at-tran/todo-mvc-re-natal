@@ -13,9 +13,8 @@
     (fn []
       [view {:align-self "stretch"}
        [text-input {:style             {:height     58
-                                        ;:alignSelf  "stretch"
                                         :font-style (if (zero? (count @state)) "italic" "normal")}
                     :on-submit-editing #(rf/dispatch [:add-todo (.. % -nativeEvent -text)])
                     :on-change-text    #(reset! state (str %))
                     :placeholder       "What needs to be done?"
-                    :default-value @state}]])))
+                    :default-value     @state}]])))

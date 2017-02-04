@@ -2,6 +2,7 @@
   (:require [reagent.core :as r :refer [atom]]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [todo-mvc.input-todo :refer [input-todo]]
+            [todo-mvc.list-todo :refer [list-todo]]
             [todo-mvc.events]
             [todo-mvc.subs]))
 
@@ -21,24 +22,17 @@
   (.alert (.-Alert ReactNative) title))
 
 (defn app-root []
-  (let [todos (subscribe [:get-todos])]
-    (fn []
-      [scroll-view {:style                   {:flex-direction "column" :margin 40 :flex 1}
-                    :content-container-style {:align-items "center"}}
-       [text {:style      {:font-size     50
-                           :font-weight   "100"
-                           :margin-bottom 20
-                           :text-align    "center"
-                           :color         "pink"}
-              :selectable true}
-        "todos"]
-       [view {:style {:flex 1 :align-self "stretch"}}
-        (map (fn [todo]
-               [view {:key (random-uuid)}
-                [text {:style {:height 58}}
-                 (:desc todo)]])
-             @todos)]
-       [input-todo]])))
+  [scroll-view {:style                   {:flex-direction "column" :margin 40 :flex 1}
+                :content-container-style {:align-items "center"}}
+   [text {:style {:font-size     50
+                  :font-weight   "100"
+                  :margin-bottom 20
+                  :text-align    "center"
+                  :color         "pink"}}
+    "todos"]
+   [input-todo]
+   [view {:style {:height 50}}]
+   [list-todo]])
 
 (defn init []
   (dispatch-sync [:initialize-db])

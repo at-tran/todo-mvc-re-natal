@@ -1,5 +1,6 @@
 (ns todo-mvc.db
-  (:require [clojure.spec :as s]))
+  (:require [clojure.spec :as s]
+            [linked.core :as linked]))
 
 ;; spec of app-db
 (s/def ::id #(satisfies? cljs.core/IUUID %))
@@ -15,4 +16,4 @@
   (s/keys :req-un [::todos]))
 
 ;; initial state of app-db
-(def app-db {:todos {}})
+(def app-db {:todos (linked/map)})

@@ -14,7 +14,7 @@
          :style {:flex-direction "row"
                  :flex           1
                  :align-items    "center"
-                 :margin         10}}
+                 :margin-top     20}}
    [text
     {:style [{:flex     1
               :fontSize 16}

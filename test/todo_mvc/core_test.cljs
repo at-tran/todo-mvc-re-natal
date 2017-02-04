@@ -1,5 +1,5 @@
 (ns todo-mvc.core-test
-  (:require [clojure.test :refer :all]
+  (:require [cljs.test :refer :all]
             [todo-mvc.core :refer :all]))
 
 (deftest a-test

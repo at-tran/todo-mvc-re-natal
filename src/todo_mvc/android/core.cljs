@@ -1,6 +1,7 @@
 (ns todo-mvc.android.core
   (:require [reagent.core :as r :refer [atom]]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
+            [todo-mvc.input-todo :refer [input-todo]]
             [todo-mvc.events]
             [todo-mvc.subs]))
 
@@ -33,12 +34,12 @@
         "todos"]
        [view {:style {:flex 1 :align-self "stretch"}}
         (map (fn [todo]
-               [text {:style {:height 58}
-                      :key   (random-uuid)}
-                (:desc todo)])
+               [view {:key (random-uuid)}
+                [text {:style {:height 58}}
+                 (:desc todo)]])
              @todos)]
-       [text-input {:style             {:height 58 :align-self "stretch"}
-                    :on-submit-editing #(dispatch [:add-todo (.. % -nativeEvent -text)])}]])))
+       [input-todo]])))
+
 (defn init []
   (dispatch-sync [:initialize-db])
   (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))

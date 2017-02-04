@@ -13,7 +13,7 @@
   :aliases {"prod-build" ^{:doc "Recompile code with prod profile."}
                          ["do" "clean"
                           ["with-profile" "prod" "cljsbuild" "once"]]}
-  :profiles {:dev  {:dependencies [[figwheel-sidecar "0.5.9"]
+  :profiles {:dev  {:dependencies [[figwheel-sidecar "0.5.8"]
                                    [com.cemerick/piggieback "0.2.1"]]
                     :source-paths ["src" "env/dev"]
                     :cljsbuild    {:builds [{:id           "ios"

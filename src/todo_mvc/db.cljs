@@ -7,12 +7,12 @@
 (s/def ::done? boolean?)
 
 (s/def ::todo
-  (s/keys :req-un [::id ::desc ::done?]))
+  (s/keys :req-un [::desc ::done?]))
 
-(s/def ::todos (s/coll-of ::todo :kind vector? :min-count 0))
+(s/def ::todos (s/map-of ::id ::todo :min-count 0))
 
 (s/def ::app-db
   (s/keys :req-un [::todos]))
 
 ;; initial state of app-db
-(def app-db {:todos []})
+(def app-db {:todos {}})

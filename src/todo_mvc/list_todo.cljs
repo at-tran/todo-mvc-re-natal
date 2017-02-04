@@ -9,14 +9,15 @@
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def icon (r/adapt-react-class (.-default FontAwesome)))
 
-(defn item-todo [{:keys [id done? desc]}]
+(defn item-todo [[id {:keys [done? desc]}]]
   [view {:key   id
          :style {:flex-direction "row"
                  :flex           1
                  :align-items    "center"
-                 :height         50}}
+                 :margin         10}}
    [text
-    {:style [{:flex 1}
+    {:style [{:flex     1
+              :fontSize 16}
              (if done? {:textDecorationLine "line-through"})]}
     desc]
    [icon {:name     (if done? "check-circle" "circle-o")

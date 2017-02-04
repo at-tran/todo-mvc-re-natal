@@ -22,7 +22,7 @@
   (.alert (.-Alert ReactNative) title))
 
 (defn app-root []
-  [scroll-view {:style                   {:flex-direction "column" :margin 40 :flex 1}
+  [scroll-view {:style                   {:margin 40 :flex 1}
                 :content-container-style {:align-items "center"}}
    [text {:style {:font-size     50
                   :font-weight   "100"

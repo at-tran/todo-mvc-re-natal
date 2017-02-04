@@ -20,19 +20,6 @@
     (after (partial check-and-throw ::db/app-db))
     []))
 
-(defn index-of-id [todos id]
-  (loop [index 0 [cur & more] todos]
-    (when cur
-      (if (= id (:id cur))
-        index
-        (recur (inc index) more)))))
-
-(defn toggle-todo [todos id]
-  (if-let [index (index-of-id todos id)]
-    (update todos index
-            (fn [todo] (update todo :done? not)))
-    todos))
-
 ;; -- Handlers --------------------------------------------------------------
 
 (reg-event-db
@@ -45,14 +32,17 @@
   :add-todo
   validate-spec
   (fn [db [_ todo]]
-    (update db :todos
-            #(conj % {:id    (random-uuid)
-                      :desc  todo
-                      :done? false}))))
+    (assoc-in db [:todos (random-uuid)] {:desc  todo
+                                         :done? false})))
 
 (reg-event-db
   :toggle-todo
   validate-spec
   (fn [db [_ id]]
-    (update db :todos
-            #(toggle-todo % id))))
+    (update-in db [:todos id :done?] not)))
+
+(reg-event-db
+  :remove-todo
+  validate-spec
+  (fn [db [_ id]]))
+

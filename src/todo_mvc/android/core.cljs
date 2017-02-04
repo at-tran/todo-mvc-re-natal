@@ -22,17 +22,19 @@
   (.alert (.-Alert ReactNative) title))
 
 (defn app-root []
-  [scroll-view {:style                   {:margin 40 :flex 1}
-                :content-container-style {:align-items "center"}}
-   [text {:style {:font-size     50
-                  :font-weight   "100"
-                  :margin-bottom 20
-                  :text-align    "center"
-                  :color         "pink"}}
-    "todos"]
-   [input-todo]
-   [view {:style {:height 20}}]
-   [list-todo]])
+  [view {:style {:flex 1}}
+   [scroll-view {:style                          {:margin 40 :flex 1}
+                 :content-container-style        {:align-items "center"}
+                 :showsHorizontalScrollIndicator false}
+    [text {:style {:font-size     50
+                   :font-weight   "100"
+                   :margin-bottom 20
+                   :text-align    "center"
+                   :color         "pink"}}
+     "todos"]
+    [input-todo]
+    [view {:style {:height 20}}]
+    [list-todo]]])
 
 (defn init []
   (dispatch-sync [:initialize-db])

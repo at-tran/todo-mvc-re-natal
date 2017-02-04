@@ -31,7 +31,7 @@
                   :color         "pink"}}
     "todos"]
    [input-todo]
-   [view {:style {:height 50}}]
+   [view {:style {:height 20}}]
    [list-todo]])
 
 (defn init []

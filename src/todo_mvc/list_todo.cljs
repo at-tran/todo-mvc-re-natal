@@ -3,16 +3,25 @@
             [re-frame.core :as rf]))
 
 (def ReactNative (js/require "react-native"))
+(def FontAwesome (js/require "react-native-vector-icons/FontAwesome"))
 
 (def text (r/adapt-react-class (.-Text ReactNative)))
 (def view (r/adapt-react-class (.-View ReactNative)))
-;(def circle-checkbox (js/require "react-native-circle-checkbox"))
+(def icon (r/adapt-react-class (.-default FontAwesome)))
 
-(defn item-todo [todo]
-  [view {:key (random-uuid)}
-   [text {:style [{:height 58} nil]}
-
-    (:desc todo)]])
+(defn item-todo [{:keys [id done? desc]}]
+  [view {:key   id
+         :style {:flex-direction "row"
+                 :flex           1
+                 :align-items    "center"
+                 :height         50}}
+   [text
+    {:style [{:flex 1}
+             (if done? {:textDecorationLine "line-through"})]}
+    desc]
+   [icon {:name     (if done? "check-circle" "circle-o")
+          :size     30
+          :on-press #(rf/dispatch [:toggle-todo id])}]])
 
 (defn list-todo []
   (let [todos (rf/subscribe [:get-todos])]

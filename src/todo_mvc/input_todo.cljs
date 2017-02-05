@@ -15,7 +15,8 @@
        [text-input {:style             {:height     58
                                         :font-style (if (zero? (count @state)) "italic" "normal")
                                         :fontSize   16}
-                    :on-submit-editing #(rf/dispatch [:add-todo (.. % -nativeEvent -text)])
+                    :on-submit-editing #(do (rf/dispatch [:add-todo (.. % -nativeEvent -text)])
+                                            (reset! state ""))
                     :on-change-text    #(reset! state (str %))
                     :placeholder       "What needs to be done?"
                     :default-value     @state}]])))

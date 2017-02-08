@@ -22,20 +22,21 @@
   (.alert (.-Alert ReactNative) title))
 
 (defn app-root []
-  [view {:style {:flex 1}}
-   [scroll-view {:style                        {:margin 40 :flex 1}
-                 :content-container-style      {:align-items "center"}
-                 :showsVerticalScrollIndicator false
-                 :keyboardShouldPersistTaps    "handled"}
-    [text {:style {:font-size     50
-                   :font-weight   "100"
-                   :margin-bottom 20
-                   :text-align    "center"
-                   :color         "pink"}}
-     "todos"]
-    [input-todo]
-    [view {:style {:height 20}}]
-    [list-todo]]])
+  [scroll-view {:style                        {:margin-left  15
+                                               :margin-right 15
+                                               :flex         1}
+                :content-container-style      {:align-items "center"}
+                :showsVerticalScrollIndicator false
+                :keyboardShouldPersistTaps    "handled"}
+   [text {:style {:font-size     70
+                  :font-weight   "100"
+                  :margin-bottom 10
+                  :text-align    "center"
+                  :color         "pink"}}
+    "todos"]
+   [input-todo]
+   [view {:style {:height 10}}]
+   [list-todo]])
 
 (defn init []
   (load-todos

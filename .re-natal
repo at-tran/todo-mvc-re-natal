@@ -8,7 +8,8 @@
     "prod": "env/prod"
   },
   "modules": [
-    "react-native-vector-icons/FontAwesome"
+    "react-native-vector-icons/FontAwesome",
+    "react-native-vector-icons/MaterialIcons"
   ],
   "imageDirs": [
     "images"

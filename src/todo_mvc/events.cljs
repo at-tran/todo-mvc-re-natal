@@ -35,6 +35,20 @@
            (interleave (repeatedly random-uuid) (cljs.reader/read-string s)))
     (linked/map)))
 
+; Shamelessly adapted from
+; https://github.com/clojure/core.incubator/blob/master/src/main/clojure/clojure/core/incubator.clj
+(defn dissoc-in
+  "Dissociates an entry from a nested associative structure returning a new
+  nested structure. keys is a sequence of keys. Any empty maps that result
+  will be present in the new structure."
+  [m [k & ks :as keys]]
+  (if ks
+    (if-let [nextmap (get m k)]
+      (let [newmap (dissoc-in nextmap ks)]
+        (assoc m k newmap))
+      m)
+    (dissoc m k)))
+
 ;; -- Handlers --------------------------------------------------------------
 
 (reg-event-db
@@ -60,7 +74,8 @@
 (reg-event-db
   :remove-todo
   [validate-spec update-storage]
-  (fn [db [_ id]]))
+  (fn [db [_ id]]
+    (dissoc-in db [:todos id])))
 
 ;; Functions
 

@@ -3,7 +3,7 @@
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [todo-mvc.input-todo :refer [input-todo]]
             [todo-mvc.list-todo :refer [list-todo]]
-            [todo-mvc.events :refer (load-todos)]
+            [todo-mvc.events :refer [load-todos parse-todos]]
             [todo-mvc.subs]))
 
 (def ReactNative (js/require "react-native"))
@@ -39,5 +39,9 @@
    [list-todo]])
 
 (defn init []
+  (dispatch-sync [:initialize-db])
   (load-todos
-    (fn [] (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))))
+    (fn [todos]
+      (dispatch [:load-todos todos])))
+  (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))
+

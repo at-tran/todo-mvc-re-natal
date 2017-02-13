@@ -54,9 +54,14 @@
 (reg-event-db
   :initialize-db
   validate-spec
-  (fn [_ [_ data]]
-    (println data)
-    data))
+  (fn [_ [_ _]]
+    app-db))
+
+(reg-event-db
+  :load-todos
+  [validate-spec update-storage]
+  (fn [db [_ todos]]
+    (merge db {:todos todos})))
 
 (reg-event-db
   :add-todo
@@ -91,7 +96,6 @@
 
 (defn load-todos [callback]
   (-> (.getItem AsyncStorage "todos")
-      (.then
-        (fn [s]
-          (dispatch-sync [:initialize-db {:todos (parse-todos s)}])))
+      (.then #(parse-todos %))
       (.then callback)))
+

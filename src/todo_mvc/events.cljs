@@ -40,7 +40,7 @@
 (defn dissoc-in
   "Dissociates an entry from a nested associative structure returning a new
   nested structure. keys is a sequence of keys. Any empty maps that result
-  will be present in the new structure."
+  WILL be present in the new structure."
   [m [k & ks :as keys]]
   (if ks
     (if-let [nextmap (get m k)]
@@ -61,9 +61,11 @@
 (reg-event-db
   :add-todo
   [validate-spec update-storage]
-  (fn [db [_ todo]]
-    (assoc-in db [:todos (random-uuid)] {:desc  todo
-                                         :done? false})))
+  (fn [db [_ desc]]
+    (if (seq desc)
+      (assoc-in db [:todos (random-uuid)] {:desc  desc
+                                           :done? false})
+      db)))
 
 (reg-event-db
   :toggle-todo
@@ -76,6 +78,14 @@
   [validate-spec update-storage]
   (fn [db [_ id]]
     (dissoc-in db [:todos id])))
+
+(reg-event-db
+  :update-todo
+  [validate-spec update-storage]
+  (fn [db [_ id new-desc]]
+    (if (seq new-desc)
+      (assoc-in db [:todos id :desc] new-desc)
+      (dissoc-in db [:todos id]))))
 
 ;; Functions
 

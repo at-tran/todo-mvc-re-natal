@@ -1,6 +1,7 @@
 (ns todo-mvc.list-todo
   (:require [reagent.core :as r]
-            [re-frame.core :as rf]))
+            [re-frame.core :as rf]
+            [todo-mvc.editable-text :refer [editable-text]]))
 
 (def ReactNative (js/require "react-native"))
 (def FontAwesome (js/require "react-native-vector-icons/FontAwesome"))
@@ -13,7 +14,7 @@
 (def material-icon (r/adapt-react-class (.-default MaterialIcons)))
 
 
-(defn item-todo [[id {:keys [done? desc]}]]
+(defn item-todo [[id {:keys [desc done?]}]]
   [view {:style      {:flex-direction "row"
                       :flex           1
                       :align-items    "center"
@@ -21,21 +22,12 @@
          :key        id
          :margin-top 10}
    [material-icon {:name     "close"
-                   :size     30
+                   :size     25
                    :on-press #(rf/dispatch [:remove-todo id])
                    :color    "red"
-                   :style    {:opacity      0.7
+                   :style    {:opacity      0.5
                               :margin-right 5}}]
-   [text
-    {:style [{:flex     1
-              :fontSize 18
-              :color    "black"}
-             (if done? {:textDecorationLine "line-through"
-                        :color              "grey"
-                        :opacity            0.7})]
-     :multiline true}
-    desc]
-
+   [editable-text id desc done?]
    [fontawesome-icon {:name     (if done? "check-circle" "circle-o")
                       :size     40
                       :on-press #(rf/dispatch [:toggle-todo id])

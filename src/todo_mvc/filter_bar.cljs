@@ -53,6 +53,7 @@
             :align-items    "center"}}
    [active-counter]
    [filter-buttons]
-   [text-button {:title "Clear completed"
-                 :style {:flex 0}}]])
+   [text-button {:title    "Clear completed"
+                 :style    {:flex 0}
+                 :on-press #(rf/dispatch [:clear-completed])}]])
 

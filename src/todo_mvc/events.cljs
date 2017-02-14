@@ -3,7 +3,8 @@
     [re-frame.core :refer [dispatch-sync reg-event-db after]]
     [clojure.spec :as s]
     [todo-mvc.db :as db :refer [app-db]]
-    [linked.core :as linked]))
+    [linked.core :as linked]
+    [todo-mvc.subs :refer [filter-todos-by-status]]))
 
 (def ReactNative (js/require "react-native"))
 
@@ -48,7 +49,7 @@
 (reg-event-db
   :initialize-db
   validate-spec
-  (fn [_ [_ _]]
+  (fn [_ [_]]
     app-db))
 
 (reg-event-db
@@ -93,6 +94,12 @@
   [validate-spec update-storage]
   (fn [db [_ showing]]
     (assoc db :showing showing)))
+
+(reg-event-db
+  :clear-completed
+  [validate-spec update-storage]
+  (fn [db [_]]
+    (update db :todos #(into (linked/map) (filter-todos-by-status % false)))))
 
 ;; Functions
 

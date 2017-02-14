@@ -6,7 +6,7 @@
   (fn [db _]
     (:todos db)))
 
-(defn- filter-todos-by-status [todos done?]
+(defn filter-todos-by-status [todos done?]
   (let [pred (if done? true? false?)]
     (filter (fn [[_ todo]] (pred (:done? todo))) todos)))
 

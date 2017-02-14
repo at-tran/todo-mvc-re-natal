@@ -15,7 +15,8 @@
 (defn init []
   (dispatch-sync [:initialize-db])
   (load-todos
-    (fn [todos]
-      (dispatch [:load-todos todos])))
+    (fn [{:keys [todos showing]}]
+      (dispatch [:load-todos todos])
+      (dispatch [:update-showing showing])))
   (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))
 

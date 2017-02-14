@@ -2,7 +2,8 @@
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
             [todo-mvc.input-todo :refer [input-todo]]
-            [todo-mvc.list-todo :refer [list-todo]]))
+            [todo-mvc.list-todo :refer [list-todo]]
+            [todo-mvc.filter-bar :refer [filter-bar]]))
 
 (def ReactNative (js/require "react-native"))
 
@@ -27,6 +28,7 @@
     [input-todo]
     [view {:style {:height 10}}]
     [list-todo]]
-   [view
-    {:style {:margin 10}}
-    [text (str @(rf/subscribe [:get-uncompleted-count]) " items left")]]])
+   [filter-bar]])
+
+
+

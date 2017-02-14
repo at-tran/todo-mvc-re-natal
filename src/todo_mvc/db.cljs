@@ -3,7 +3,7 @@
             [linked.core :as linked]))
 
 ;; spec of app-db
-(s/def ::id #(satisfies? cljs.core/IUUID %))
+(s/def ::id string?)
 (s/def ::desc string?)
 (s/def ::done? boolean?)
 
@@ -12,8 +12,11 @@
 
 (s/def ::todos (s/map-of ::id ::todo :min-count 0))
 
+(s/def ::showing #{:all :active :completed})
+
 (s/def ::app-db
-  (s/keys :req-un [::todos]))
+  (s/keys :req-un [::todos ::showing]))
 
 ;; initial state of app-db
-(def app-db {:todos (linked/map)})
+(def app-db {:todos   (linked/map)
+             :showing :all})

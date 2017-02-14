@@ -27,13 +27,7 @@
 
 (def update-storage
   (after (fn [db _]
-           (.setItem AsyncStorage "todos" (str (vals (:todos db)))))))
-
-(defn parse-todos [s]
-  (if s
-    (apply linked/map
-           (interleave (repeatedly random-uuid) (cljs.reader/read-string s)))
-    (linked/map)))
+           (.setItem AsyncStorage "data" (pr-str db)))))
 
 ; Shamelessly adapted from
 ; https://github.com/clojure/core.incubator/blob/master/src/main/clojure/clojure/core/incubator.clj
@@ -68,8 +62,10 @@
   [validate-spec update-storage]
   (fn [db [_ desc]]
     (if (seq desc)
-      (assoc-in db [:todos (random-uuid)] {:desc  desc
-                                           :done? false})
+      (assoc-in db
+                [:todos (str (random-uuid))]
+                {:desc  desc
+                 :done? false})
       db)))
 
 (reg-event-db
@@ -92,10 +88,15 @@
       (assoc-in db [:todos id :desc] new-desc)
       (dissoc-in db [:todos id]))))
 
+(reg-event-db
+  :update-showing
+  [validate-spec update-storage]
+  (fn [db [_ showing]]
+    (assoc db :showing showing)))
+
 ;; Functions
 
 (defn load-todos [callback]
-  (-> (.getItem AsyncStorage "todos")
-      (.then #(parse-todos %))
+  (-> (.getItem AsyncStorage "data")
+      (.then #(if % (cljs.reader/read-string %) app-db))
       (.then callback)))
-

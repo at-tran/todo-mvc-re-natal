@@ -35,4 +35,4 @@
 
 (defn list-todo []
   [view {:style {:flex 1 :align-self "stretch"}}
-   (map item-todo @(rf/subscribe [:get-todos]))])
+   (map item-todo @(rf/subscribe [:get-showing-todos]))])

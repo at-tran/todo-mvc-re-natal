@@ -6,10 +6,22 @@
   (fn [db _]
     (:todos db)))
 
-(defn- completed? [todo]
-  (true? (:done? todo)))
+(defn- filter-todos-by-status [todos done?]
+  (let [pred (if done? true? false?)]
+    (filter (fn [[_ todo]] (pred (:done? todo))) todos)))
 
 (reg-sub
-  :get-uncompleted-count
+  :get-active-count
   (fn [{:keys [todos]} _]
-    (count (remove (fn [[_ todo]] (completed? todo)) todos))))
+    (count (filter (fn [[_ todo]] (false? (:done? todo))) todos))))
+
+(defn filter-shown-todos [todos showing]
+  (case showing
+    :all todos
+    :active (filter-todos-by-status todos false)
+    :completed (filter-todos-by-status todos true)))
+
+(reg-sub
+  :get-showing-todos
+  (fn [{:keys [todos showing]} _]
+    (filter-shown-todos todos showing)))

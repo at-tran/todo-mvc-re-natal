@@ -34,7 +34,5 @@
                       :style    {:margin-left 5}}]])
 
 (defn list-todo []
-  (let [todos (rf/subscribe [:get-todos])]
-    (fn []
-      [view {:style {:flex 1 :align-self "stretch"}}
-       (map item-todo @todos)])))
+  [view {:style {:flex 1 :align-self "stretch"}}
+   (map item-todo @(rf/subscribe [:get-todos]))])

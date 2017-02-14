@@ -61,7 +61,7 @@
   :load-todos
   [validate-spec update-storage]
   (fn [db [_ todos]]
-    (merge db {:todos todos})))
+    (update db :todos #(merge % todos))))
 
 (reg-event-db
   :add-todo

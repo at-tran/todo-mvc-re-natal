@@ -25,3 +25,9 @@
   :get-showing-todos
   (fn [{:keys [todos showing]} _]
     (filter-shown-todos todos showing)))
+
+(reg-sub
+  :get-showing
+  (fn [db _]
+    (:showing db)))
+

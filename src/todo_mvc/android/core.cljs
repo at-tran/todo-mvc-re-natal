@@ -17,6 +17,6 @@
   (load-todos
     (fn [{:keys [todos showing]}]
       (dispatch [:load-todos todos])
-      (dispatch [:update-showing showing])))
+      (dispatch [:set-showing showing])))
   (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))
 

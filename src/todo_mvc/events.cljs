@@ -89,7 +89,7 @@
       (dissoc-in db [:todos id]))))
 
 (reg-event-db
-  :update-showing
+  :set-showing
   [validate-spec update-storage]
   (fn [db [_ showing]]
     (assoc db :showing showing)))

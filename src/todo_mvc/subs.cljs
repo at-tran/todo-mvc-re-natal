@@ -1,14 +1,11 @@
 (ns todo-mvc.subs
-  (:require [re-frame.core :refer [reg-sub]]))
+  (:require [re-frame.core :refer [reg-sub]]
+            [todo-mvc.utils :refer [filter-map]]))
 
 (reg-sub
   :get-todos
   (fn [db _]
     (:todos db)))
-
-(defn filter-todos-by-status [todos done?]
-  (let [pred (if done? true? false?)]
-    (filter (fn [[_ todo]] (pred (:done? todo))) todos)))
 
 (reg-sub
   :get-active-count
@@ -18,8 +15,8 @@
 (defn filter-shown-todos [todos showing]
   (case showing
     :all todos
-    :active (filter-todos-by-status todos false)
-    :completed (filter-todos-by-status todos true)))
+    :active (filter-map #(not (:done? %2)) todos)
+    :completed (filter-map #(:done? %2) todos)))
 
 (reg-sub
   :get-showing-todos
@@ -30,4 +27,3 @@
   :get-showing
   (fn [db _]
     (:showing db)))
-

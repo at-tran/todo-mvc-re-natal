@@ -4,7 +4,7 @@
     [clojure.spec :as s]
     [todo-mvc.db :as db :refer [app-db]]
     [linked.core :as linked]
-    [todo-mvc.subs :refer [filter-todos-by-status]]))
+    [todo-mvc.utils :refer [filter-map update-map]]))
 
 (def ReactNative (js/require "react-native"))
 
@@ -99,7 +99,19 @@
   :clear-completed
   [validate-spec update-storage]
   (fn [db [_]]
-    (update db :todos #(into (linked/map) (filter-todos-by-status % false)))))
+    (update db :todos #(into (linked/map)
+                             (filter-map (fn [_ v] (not (:done? v))) %)))))
+
+(reg-event-db
+  :toggle-all
+  [validate-spec update-storage]
+  (fn [db [_ completed?]]
+    (update db :todos #(into (linked/map)
+                             (update-map (fn [k v]
+                                           [k (if completed?
+                                                (assoc v :done? true)
+                                                (assoc v :done? false))])
+                                         %)))))
 
 ;; Functions
 

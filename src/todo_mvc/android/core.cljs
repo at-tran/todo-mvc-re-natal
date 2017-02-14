@@ -19,4 +19,3 @@
       (dispatch [:load-todos todos])
       (dispatch [:set-showing showing])))
   (.registerComponent app-registry "TodoMvc" #(r/reactify-component app-root)))
-

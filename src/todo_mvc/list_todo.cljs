@@ -7,8 +7,6 @@
 (def FontAwesome (js/require "react-native-vector-icons/FontAwesome"))
 (def MaterialIcons (js/require "react-native-vector-icons/MaterialIcons"))
 
-(def text (r/adapt-react-class (.-Text ReactNative)))
-(def text-input (r/adapt-react-class (.-TextInput ReactNative)))
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def fontawesome-icon (r/adapt-react-class (.-default FontAwesome)))
 (def material-icon (r/adapt-react-class (.-default MaterialIcons)))

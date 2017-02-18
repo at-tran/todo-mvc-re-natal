@@ -7,15 +7,17 @@
 (def FontAwesome (js/require "react-native-vector-icons/FontAwesome"))
 (def MaterialIcons (js/require "react-native-vector-icons/MaterialIcons"))
 (def LayoutAnimation (.-LayoutAnimation ReactNative))
+(def ListView (.-ListView ReactNative))
 
 (def view (r/adapt-react-class (.-View ReactNative)))
+(def list-view (r/adapt-react-class (.-ListView ReactNative)))
 (def fontawesome-icon (r/adapt-react-class (.-default FontAwesome)))
 (def material-icon (r/adapt-react-class (.-default MaterialIcons)))
 
 (when (= "android" (.. ReactNative -Platform -OS))
   (.. ReactNative -UIManager (setLayoutAnimationEnabledExperimental true)))
 
-(defn item-todo [[id {:keys [desc done?]}]]
+(defn item-todo [id {:keys [desc done?]}]
   [view
    {:style {:flex-direction "row"
             :flex           1
@@ -35,11 +37,20 @@
                       :style    {:margin-left 5}}]])
 
 (defn list-todo []
-  (r/create-class
-    {:reagent-render
-     (fn []
-       [view {:style {:flex 1 :align-self "stretch"}}
-        (map (fn [todo] ^{:key (first todo)} [item-todo todo])
-             @(rf/subscribe [:get-showing-todos]))])
-     :componentWillUpdate
-     #(.easeInEaseOut LayoutAnimation)}))
+  (let [ds (new (.-DataSource ListView) #js {:rowHasChanged not=})]
+    (r/create-class
+      {:reagent-render
+       (fn []
+         (let [dataSource (.cloneWithRows ds (clj->js @(rf/subscribe [:get-showing-todos])))]
+           [list-view
+            {:style               {:flex       1
+                                   :align-self "stretch"}
+             :dataSource          dataSource
+             :renderRow           (fn [rowData _ rowID]
+                                    (r/as-element
+                                      [item-todo rowID (js->clj rowData
+                                                                :keywordize-keys true)]))
+             ; this flag will be deprecated in future releases of react-native
+             :enableEmptySections true}]))
+       :componentWillUpdate
+       #(.easeInEaseOut LayoutAnimation)})))

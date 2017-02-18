@@ -3,11 +3,9 @@
             [re-frame.core :as rf]))
 
 (def ReactNative (js/require "react-native"))
-(def Animated (.-Animated ReactNative))
-(def Easing (.-Easing ReactNative))
+(def Animatable (js/require "react-native-animatable"))
 
-(def text (r/adapt-react-class (.-Text ReactNative)))
-(def animated-text (r/adapt-react-class (.-Text Animated)))
+(def animatable-text (r/adapt-react-class (.-Text Animatable)))
 (def text-input (r/adapt-react-class (.-TextInput ReactNative)))
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def touchable (r/adapt-react-class (.-TouchableNativeFeedback ReactNative)))
@@ -16,32 +14,19 @@
   (rf/dispatch [:update-todo id (.. event -nativeEvent -text)])
   (swap! editing not))
 
-(defn- animate [animated-value target]
-  (-> Animated
-      (.timing animated-value
-               (clj->js {:toValue  target
-                         :duration 400
-                         :easing   (.-linear Easing)}))
-      .start))
-
 (defn- text-viewer [desc done?]
-  (let [animated-value (new (.-Value Animated) (if done? 0.4 1))]
-    (r/create-class
-      {:reagent-render
-       (fn [desc done?]
-         [animated-text
-          {:style [{:flex      1
-                    :fontSize  18
-                    :textAlign "center"
-                    :opacity   animated-value
-                    :color     "black"}
-                   (if done? {:textDecorationLine "line-through"})]}
-          desc])
-
-       :component-did-update
-       (fn [comp [constructor prev-desc prev-done?]]
-         (animate animated-value (if prev-done? 1 0.4)))})))
-
+  [animatable-text
+   {:style      [{:flex      1
+                  :fontSize  18
+                  :textAlign "center"
+                  :opacity   1
+                  :color     "black"}
+                 (if done? {:textDecorationLine "line-through"
+                            :color              "grey"
+                            :opacity            0.5})]
+    :transition ["color" "opacity"]
+    :duration   400}
+   desc])
 
 (defn- text-editor [id desc editing]
   [text-input {:default-value     desc

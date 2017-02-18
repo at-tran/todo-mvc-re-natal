@@ -6,18 +6,22 @@
 (def ReactNative (js/require "react-native"))
 (def FontAwesome (js/require "react-native-vector-icons/FontAwesome"))
 (def MaterialIcons (js/require "react-native-vector-icons/MaterialIcons"))
+(def LayoutAnimation (.-LayoutAnimation ReactNative))
 
 (def view (r/adapt-react-class (.-View ReactNative)))
 (def fontawesome-icon (r/adapt-react-class (.-default FontAwesome)))
 (def material-icon (r/adapt-react-class (.-default MaterialIcons)))
 
+(when (= "android" (.. ReactNative -Platform -OS))
+  (.. ReactNative -UIManager (setLayoutAnimationEnabledExperimental true)))
+
 (defn item-todo [[id {:keys [desc done?]}]]
-  [view {:style      {:flex-direction "row"
-                      :flex           1
-                      :align-items    "center"
-                      :padding        10}
-         :key        id
-         :margin-top 10}
+  [view
+   {:style {:flex-direction "row"
+            :flex           1
+            :align-items    "center"
+            :padding        10
+            :margin-top     10}}
    [material-icon {:name     "close"
                    :size     25
                    :on-press #(rf/dispatch [:remove-todo id])
@@ -31,5 +35,11 @@
                       :style    {:margin-left 5}}]])
 
 (defn list-todo []
-  [view {:style {:flex 1 :align-self "stretch"}}
-   (map item-todo @(rf/subscribe [:get-showing-todos]))])
+  (r/create-class
+    {:reagent-render
+     (fn []
+       [view {:style {:flex 1 :align-self "stretch"}}
+        (map (fn [todo] ^{:key (first todo)} [item-todo todo])
+             @(rf/subscribe [:get-showing-todos]))])
+     :componentWillUpdate
+     #(.easeInEaseOut LayoutAnimation)}))

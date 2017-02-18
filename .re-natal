@@ -9,7 +9,8 @@
   },
   "modules": [
     "react-native-vector-icons/FontAwesome",
-    "react-native-vector-icons/MaterialIcons"
+    "react-native-vector-icons/MaterialIcons",
+    "react-native-animatable"
   ],
   "imageDirs": [
     "images"

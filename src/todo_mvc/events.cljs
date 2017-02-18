@@ -105,12 +105,12 @@
 (reg-event-db
   :toggle-all
   [validate-spec update-storage]
-  (fn [db [_ completed?]]
+  (fn [db [_ all-completed?]]
     (update db :todos #(into (linked/map)
                              (update-map (fn [k v]
-                                           [k (if completed?
-                                                (assoc v :done? true)
-                                                (assoc v :done? false))])
+                                           [k (if all-completed?
+                                                (assoc v :done? false)
+                                                (assoc v :done? true))])
                                          %)))))
 
 ;; Functions

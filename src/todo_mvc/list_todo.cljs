@@ -11,7 +11,6 @@
 (def fontawesome-icon (r/adapt-react-class (.-default FontAwesome)))
 (def material-icon (r/adapt-react-class (.-default MaterialIcons)))
 
-
 (defn item-todo [[id {:keys [desc done?]}]]
   [view {:style      {:flex-direction "row"
                       :flex           1

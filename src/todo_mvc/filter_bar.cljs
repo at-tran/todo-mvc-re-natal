@@ -16,7 +16,7 @@
 (defn- active-counter []
   (let [count @(rf/subscribe [:get-active-count])]
     [text
-     {:style common-style}
+     {:style [common-style {:width 90}]}
      (str count " item" (if (= count 1) "" "s") " left")]))
 
 (defn text-button [{:keys [title style on-press border?]}]

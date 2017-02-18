@@ -24,9 +24,8 @@
                     :placeholder       "What needs to be done?"
                     :default-value     @state
                     :auto-capitalize   "sentences"}]
-       [material-icon {:name     "keyboard-arrow-down"
-                       :size     50
-                       :style    {:padding-top 10}
-                       :on-press #(rf/dispatch [:toggle-all
-                                                (not= 0
-                                                      @(rf/subscribe [:get-active-count]))])}]])))
+       (let [all-completed (= 0 @(rf/subscribe [:get-active-count]))]
+         [material-icon {:name     "keyboard-arrow-down"
+                         :size     50
+                         :style    [{:paddingTop 10} (when-not all-completed {:opacity 0.5})]
+                         :on-press #(rf/dispatch [:toggle-all all-completed])}])])))

@@ -14,7 +14,7 @@ Follow the process outlined in the [re-natal documentation](https://github.com/d
 
 ## Generating an APK
 
-Follow the process outlined in the [re-natal documentation](https://github.com/drapanjanas/re-natal#prod-build) on running a "prod" build.
+Follow the process outlined in the [re-natal documentation](https://github.com/drapanjanas/re-natal#production-build) on running a production build.
 
 ## License
 

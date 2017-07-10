@@ -17,7 +17,7 @@
 (when (= "android" (.. ReactNative -Platform -OS))
   (.. ReactNative -UIManager (setLayoutAnimationEnabledExperimental true)))
 
-(defn item-todo [id {:keys [desc done?]}]
+(defn item-todo [[id {:keys [desc done?]}]]
   [view
    {:style {:flex-direction "row"
             :flex           1
@@ -46,10 +46,10 @@
             {:style               {:flex       1
                                    :align-self "stretch"}
              :dataSource          dataSource
-             :renderRow           (fn [rowData _ rowID]
+             :renderRow           (fn [rowData _ _]
                                     (r/as-element
-                                      [item-todo rowID (js->clj rowData
-                                                                :keywordize-keys true)]))
+                                      [item-todo (js->clj rowData
+                                                          :keywordize-keys true)]))
              ; this flag will be deprecated in future releases of react-native
              :enableEmptySections true}]))
        :componentWillUpdate

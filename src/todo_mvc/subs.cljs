@@ -14,7 +14,7 @@
 
 (defn filter-shown-todos [todos showing]
   (case showing
-    :all todos
+    :all (filter-map (fn [_ _] true) todos)
     :active (filter-map #(not (:done? %2)) todos)
     :completed (filter-map #(:done? %2) todos)))
 
